@@ -42,21 +42,21 @@ ADDR is 0101 110x ( for the MCP 4461, 0101 aaax for ones with more than 1 adress
  DATA          : DDDD DDDD * only read and write commands have data 
  */
   //<<constructor>> 
-  MCP4461::MCP4461(char dev_address) // define the device adress for this instance
+  MCP4461::MCP4461(uint8_t dev_address) // define the device adress for this instance
   {
   dev_ADDR= dev_address;
   };
   //<<destructor>>
   MCP4461::~MCP4461(){
-  Wire.end()
+  Wire.end();
   };
 
  /*
  set the output of a wiper
  */
-uint8_t setWiper(uint8_t wiper, uint16_t setValue)
+uint8_t MCP4461::setWiper(uint8_t wiper, uint16_t setValue)
 {
-	if (wiper == WIPER0 ||wiper == WIPER1 || wiper == WIPER1||wiper == WIPER1) // sanity check
+	if (wiper == WIPER0 ||wiper == WIPER1 || wiper == WIPER2||wiper == WIPER3) // sanity check
 	{
 		return write(wiper, setValue) ;
 	}
@@ -68,7 +68,7 @@ uint8_t setWiper(uint8_t wiper, uint16_t setValue)
 /*
 a wrapper for the read, specific to the wipers
 */
-uint16_t getWiper(uint8_t wiper)
+uint16_t MCP4461::getWiper(uint8_t wiper)
 {
 	return read(wiper);
 }
@@ -76,6 +76,7 @@ uint16_t getWiper(uint8_t wiper)
  
 uint8_t MCP4461::write(uint8_t mem_addr, uint16_t setValue) // mem_addr is 00-0F, setvalue is 0-257
 {
+    uint16_t set_reading = 0;
 //if you set the volatile output register, the same value ispu tto the non-volatile register
 	if(setValue <0)
 	{
@@ -100,7 +101,7 @@ uint8_t MCP4461::write(uint8_t mem_addr, uint16_t setValue) // mem_addr is 00-0F
   Wire.endTransmission();                 // stop transmitting
   Wire.flush();
   delay(10);							  // give unit time to apply the value to non volatile register
-  uint_16_t set_reading = read(mem_addr);
+  set_reading = read(mem_addr);
   if (set_reading == setValue)
   {
   return 1; // it has accepted our setting ( EEPROM reflects what we set it to )
@@ -120,7 +121,7 @@ uint16_t MCP4461::read(uint8_t mem_addr)// mem addr 0x00 - 0x0f ( 0-16 )
   Wire.beginTransmission(dev_ADDR);
   Wire.write(cmd_byte); 
   Wire.endTransmission(); 
-  Wire.requestFrom(dev_ADDR, 2); 
+  Wire.requestFrom((int)dev_ADDR,(int) 2); 
   Wire.endTransmission();                 // stop transmitting
   if(Wire.available())
   {

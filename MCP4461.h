@@ -13,10 +13,10 @@
 	#define WIPER2_VOLATILE 0x06
 	#define WIPER3_VOLATILE 0x07
 
-	#define WIPER_0 (uint8_t)WIPER0_VOLATILE
-	#define WIPER_1 (uint8_t)WIPER2_VOLATILE
-	#define WIPER_2 (uint8_t)WIPER3_VOLATILE
-	#define WIPER_3 (uint8_t)WIPER4_VOLATILE
+	#define WIPER0 (uint8_t)WIPER0_VOLATILE
+	#define WIPER1 (uint8_t)WIPER1_VOLATILE
+	#define WIPER2 (uint8_t)WIPER2_VOLATILE
+	#define WIPER3 (uint8_t)WIPER3_VOLATILE
 
 	#define ALL_WIPERS 0xFF
 
@@ -39,11 +39,11 @@
 			uint8_t setWiper(uint8_t wiper, uint16_t setValue);
 			uint16_t getWiper(uint8_t wiper);
 			uint16_t read(uint8_t mem_addr);	 // mem addr 0x00 - 0x0f ( 0-16 ), returns 9 bit value at that adress
-			uint_8_t write(uint8_t mem_addr, uint16_t setValue); // mem_addr is 00-0F, setvalue is 0-257 returns 1if succesful
-			uint_8_t openCircuit();
-			uint_8_t enableOutput();
+			uint8_t write(uint8_t mem_addr, uint16_t setValue); // mem_addr is 00-0F, setvalue is 0-257 returns 1if succesful
+			uint8_t openCircuit();
+			uint8_t enableOutput();
 	private:
 	uint8_t dev_ADDR;
-	MCP_data pot_datapacket;
+	//MCP_data pot_datapacket;
 	};
 	#endif
